@@ -1,10 +1,6 @@
-# big downloaded datasets, videos and trained models are too big for git
-# -> see docs/DATA.md for where to download them
-data/roboflow/
-data/datasets/
-data/videos/
-data/frames/
-data/commons/rejected/
+# all data (datasets, photos, labels, videos) stays out of git -> see docs/DATA.md for how to get it
+data/
+# training results, videos and big files (our final models are in models/)
 runs/
 *.pt
 !models/*.pt

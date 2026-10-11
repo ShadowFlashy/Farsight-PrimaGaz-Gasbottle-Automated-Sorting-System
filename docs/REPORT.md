@@ -166,7 +166,7 @@ To label them faster we used **model-assisted labeling** (`scripts/autolabel.py`
 Missed bottles are mostly small bottles far away (bottle cages at petrol stations, trucks full of bottles), bottles in
 the dark and old black-and-white photos. Wrong boxes are things that look a bit like a bottle: cooking pots, buckets,
 yellow jerrycans, a tractor wheel, a caravan, fire extinguishers, and sometimes two boxes on one bottle. The result of
-the check is in `data/commons/label_review.csv`.
+the check is in `data/commons/label_review.csv` (in our data folder, not in git).
 
 ### 3.5 Training on all data (model B)
 
@@ -416,7 +416,7 @@ in `runs/<name>/`, the test plots in `runs/eval/`.
 ## 12. How to run everything
 
 ```
-python scripts/download_commons.py                       # Commons photos (already in the repo)
+python scripts/download_commons.py                       # Commons photos (data/ is not in git)
 # Roboflow datasets: see docs/DATA.md (download in the browser or with scripts/download_roboflow.py)
 python scripts/clean_export.py data/roboflow/cylinders   # also for gasoknok, gas, juntar
 python scripts/prepare_primagaz.py
@@ -443,6 +443,6 @@ Python packages: `requirements.txt` (Ultralytics + PyTorch with CUDA).
   dataset on Roboflow Universe (CC BY 4.0)
 - gasoknok and Gas datasets: Roboflow Universe, workspace "gas" (CC BY 4.0)
 - Juntar dataset: Roboflow Universe, workspace "TestGasBottles" (CC BY 4.0)
-- Photos from Wikimedia Commons: author and license of every photo in `data/commons/attribution.csv`
+- Photos from Wikimedia Commons: author and license of every photo in `docs/commons_attribution.csv`
 - Videos: MAKEEN Energy on YouTube, "Portugal: Petrogal LPG Cylinder Filling Plant (2013)" and "Bolivia: FLEXSPEED for
   Side-Entry Valves (2014)" (only used for testing, not shared in our repo)

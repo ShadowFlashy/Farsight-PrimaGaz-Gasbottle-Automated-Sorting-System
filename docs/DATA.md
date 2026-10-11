@@ -1,10 +1,13 @@
 # Data for gas bottle detection
 
-Overview of the data we found / collected for detecting gas bottles. Summary:
+Overview of the data we found / collected for detecting gas bottles.
 
-| Source | What | Images | Labels | License | In this repo? |
+**The `data/` folder is not in git** (too big). Download the data with the steps below, or ask the group for our
+shared copy of the `data/` folder (that one also has our sorting and labels of the Commons photos).
+
+| Source | What | Images | Labels | License | How to get it |
 |---|---|---|---|---|---|
-| Wikimedia Commons | photos of LPG bottles (to label ourselves) | 359 (+102 other) | none yet | CC BY / BY-SA / CC0 / PD | yes, `data/commons/` |
+| Wikimedia Commons | photos of LPG bottles (labeled by us) | 359 (+102 other) | `gas_bottle`, made by us | CC BY / BY-SA / CC0 / PD | `scripts/download_commons.py` or our shared copy |
 | CylinDeRS (Roboflow) | research dataset, all kinds of gas cylinders | 7,060 | 1 class `gas_cylinder` | CC BY 4.0 | no, download (see below) |
 | gasoknok (Roboflow) | close-ups of real **Primagaz** bottles | 493 | `gas_ok` / `gas_nok` | CC BY 4.0 | no, download |
 | Gas (Roboflow) | Primagaz bottles, dirty / taped bottles | 30 | `gas bottle` / `damaged bottle` / `wrong bottle` | CC BY 4.0 | no, download |
@@ -24,8 +27,11 @@ We went through all 599 downloaded photos by hand and sorted them:
   These are the images to **label ourselves** in CVAT / Roboflow (class `gas_bottle`).
 - `data/commons/other/` (102): other gas containers: industrial / medical / diving cylinders and camping cartridges.
   They don't look like Primagaz bottles. Could be used later as extra data or to test for false positives.
-- `data/commons/rejected/` (138, **not in git**): no bottle visible or too small, drawings, explosion remains,
-  big fixed tanks, near-duplicates.
+- `data/commons/rejected/` (138): no bottle visible or too small, drawings, explosion remains, big fixed tanks,
+  near-duplicates.
+
+`scripts/download_commons.py` only downloads the photos again (all 599 in `images/`); the sorting and the labels below
+are only in our shared copy of `data/`.
 
 Labels (YOLO format, class 0 = `gas_bottle`):
 
@@ -37,7 +43,8 @@ Labels (YOLO format, class 0 = `gas_bottle`):
 
 `data/commons/attribution.csv` has for every image: title, link, **author, license**, the Commons category and our
 decision (`folder` + `review_note`). Most licenses (CC BY / CC BY-SA) require that we credit the author, so we have to
-refer to this list in the report.
+refer to this list in the report. A copy is in git: [`docs/commons_attribution.csv`](commons_attribution.csv) (some of
+these photos are in the figures of the report).
 
 ## 2. Labeled datasets on Roboflow Universe (download yourself)
 
@@ -116,7 +123,7 @@ None of the data above really shows *our* situation (Primagaz bottles, in a Prim
 Yes, everything we train on is free to use (also commercially), as long as we credit the source:
 
 - **Roboflow datasets** (CylinDeRS, gasoknok, Gas, Juntar): CC BY 4.0 -> credit the dataset (see the report, section 13).
-- **Commons photos**: CC BY, CC BY-SA, CC0, public domain or GODL-India, per photo in `attribution.csv`. CC BY and
+- **Commons photos**: CC BY, CC BY-SA, CC0, public domain or GODL-India, per photo in `docs/commons_attribution.csv`. CC BY and
   CC BY-SA: credit the author. CC BY-SA ("share alike"): if we share changed versions of the photos, they must have the
   same license.
 - **MAKEEN Energy videos**: normal YouTube videos, *not* free to share. We only use them locally to test tracking
@@ -130,6 +137,6 @@ Yes, everything we train on is free to use (also commercially), as long as we cr
   CylinDeRS doesn't tell us how well it works on Primagaz bottles, so we need test images that look like the real
   situation.
 - **Split by source / video**, not by random frame (see `TODO`), otherwise the validation scores look too good.
-- **Licenses**: credit the Commons authors (`attribution.csv`) and cite the Roboflow datasets we use.
+- **Licenses**: credit the Commons authors (`docs/commons_attribution.csv`) and cite the Roboflow datasets we use.
 - **Question for the lecturer**: the `gas` workspace (gasoknok + Gas) looks like an earlier group's Primagaz project.
   Can we reuse their images?
