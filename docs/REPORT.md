@@ -24,8 +24,8 @@ Group Farsight (AI Applications, UCLL) - members: _(fill in)_
 ### What we are working toward
 
 An **automatic sorting station on the conveyor in a Primagaz filling plant**, right after the empty bottles are
-unloaded from the trucks and before they get filled. Today people check the returned bottles by eye. A camera
-system could do (part of) this:
+unloaded from the trucks and before they get filled. We assume that today the returned bottles are (partly) checked
+by people (to be confirmed by Primagaz). A camera system could do (part of) this:
 
 1. **Detect and track** every bottle on the conveyor, so every bottle gets one id. This also gives a **count**
    (per truck, per hour).
@@ -62,7 +62,7 @@ system could do (part of) this:
 ### What we build in this course (software-only prototype)
 
 We don't have access to a plant, so our prototype works **offline on recorded videos and images**:
-`video -> YOLO detection (gas_bottle) -> tracker (ByteTrack) -> count unique ids -> output video + numbers`.
+`video -> YOLO detection (gas_bottle) -> tracker (ByteTrack) -> count bottles crossing a line -> output video + numbers`.
 Classification (brand, OK/NOK) per tracked bottle is the next step.
 
 ### How we would test it
@@ -213,8 +213,10 @@ line becomes one band. That gives **4 bottles** (the GALP bottle on the left was
 
 The tracker used 15 different ids in this clip, more than the number of bottles, so there are id switches (for example
 when a bottle is hidden behind the railing or the blue frame it can come back with a new id). With the line this doesn't
-matter, as long as the id doesn't switch exactly while the bottle crosses the line. One bottle passes every 2.8 s, that's about 1,290 bottles per hour, which
-matches the 1,200 bottles/hour of this filling line (according to the video).
+matter, as long as the id doesn't switch exactly while the bottle crosses the line.
+
+One bottle passes every 2.8 s, that's about 1,290 bottles per hour, which matches the 1,200 bottles/hour of this
+filling line (according to the video).
 
 We did the same with model B:
 
@@ -366,9 +368,12 @@ in `runs/<name>/`, the test plots in `runs/eval/`.
 
 - Model B with a handheld camera: way too many track ids, so counting fails: `figures/track_flexspeed_modelB.jpg` (3.6)
 
-- Videos: the tracking videos with boxes, ids and the counting line are in `runs/track_bottles/` and
-  `runs/track_coco/` (not in git because of the size and because the clips come from MAKEEN Energy's YouTube videos).
-  Run `scripts/track_videos.py` to make them again, or see our shared OneDrive folder.
+- Videos (handed in together with this report; not in git because the clips come from MAKEEN Energy's YouTube videos,
+  `scripts/track_videos.py` makes them again):
+  - `1_counting_line_modelB.mp4`: fixed camera, 4 out of 4 bottles counted with the line (success)
+  - `2_handheld_camera_modelB.mp4`: handheld camera, the ids keep changing so counting fails (failure)
+  - `3_tracking_people_pretrained.mp4`: tracking people with the pretrained COCO model
+  - `4_filling_hall_entry_modelB.mp4`: bottles entering the filling hall, tracked with model B
 
 ## 10. Questions
 
