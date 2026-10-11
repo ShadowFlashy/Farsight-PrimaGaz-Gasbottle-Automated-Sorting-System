@@ -1,6 +1,8 @@
 # Gas bottle detection for Primagaz: progress report
 
-Group Farsight (AI Applications, UCLL) - members: _(fill in)_
+Group Farsight (AI Applications, UCLL), October 2026
+
+Members: Student Name 1, Student Name 2, Student Name 3
 
 ## 0. Summary
 
