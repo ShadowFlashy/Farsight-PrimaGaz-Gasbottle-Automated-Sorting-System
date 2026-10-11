@@ -1,0 +1,15 @@
+# 2nd training round: everything together (all classes = gas_bottle)
+# CylinDeRS + Primagaz bottles on the conveyor + Juntar trucks from above + our checked Commons photos
+path: .
+train:
+  - data/roboflow/cylinders/train/images
+  - data/datasets/primagaz/train/images
+  - data/datasets/juntar/train/images
+  - data/commons/train.txt    # only the Commons photos where the labels were checked and OK
+val:
+  - data/roboflow/cylinders/valid/images
+  - data/datasets/primagaz/val/images
+  - data/datasets/juntar/val/images
+
+names:
+  0: gas_bottle

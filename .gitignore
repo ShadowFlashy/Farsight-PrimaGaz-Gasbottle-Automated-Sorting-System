@@ -1,14 +1,19 @@
 # big downloaded datasets, videos and trained models are too big for git
 # -> see docs/DATA.md for where to download them
 data/roboflow/
+data/datasets/
 data/videos/
 data/frames/
 data/commons/rejected/
 runs/
 *.pt
+!models/*.pt
 *.mp4
 *.zip
 *.cache
+
+# private keys (Roboflow API key)
+.env
 
 # python
 __pycache__/

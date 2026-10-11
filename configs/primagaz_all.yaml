@@ -1,0 +1,7 @@
+# all Primagaz images together, only to test a model that never saw them (e.g. the CylinDeRS model)
+path: data/datasets/primagaz
+train: train/images
+val: [train/images, val/images, test/images]
+
+names:
+  0: gas_bottle

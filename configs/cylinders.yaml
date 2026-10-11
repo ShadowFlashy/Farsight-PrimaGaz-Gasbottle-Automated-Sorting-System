@@ -1,0 +1,9 @@
+# CylinDeRS from Roboflow (see docs/DATA.md), download with scripts/download_roboflow.py
+# paths are relative to the root of the repo (the scripts run from there)
+path: data/roboflow/cylinders
+train: train/images
+val: valid/images
+test: test/images
+
+names:
+  0: gas_bottle

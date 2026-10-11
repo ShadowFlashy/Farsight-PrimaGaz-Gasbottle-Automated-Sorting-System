@@ -1,0 +1,9 @@
+# Primagaz bottles on the conveyor (gasoknok + Gas from Roboflow), built with scripts/prepare_primagaz.py
+# split by bottle id, so the same bottle is never in train and test
+path: data/datasets/primagaz
+train: train/images
+val: val/images
+test: test/images
+
+names:
+  0: gas_bottle

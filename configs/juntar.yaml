@@ -1,0 +1,9 @@
+# Juntar (Roboflow): trucks full of LPG bottles seen from above, all bottle types -> gas_bottle
+# built with: python scripts/to_one_class.py data/roboflow/juntar data/datasets/juntar
+path: data/datasets/juntar
+train: train/images
+val: val/images
+test: test/images
+
+names:
+  0: gas_bottle
