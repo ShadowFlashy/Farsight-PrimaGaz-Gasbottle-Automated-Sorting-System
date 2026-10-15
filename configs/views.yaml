@@ -1,0 +1,95 @@
+# Camera views per recording. Videos: see `video` below ({rec} = recording, {view} = view name).
+# Working assumption: the views of one recording are frame-synchronised (same frame index = same moment).
+# The real delay between views is estimated later from the line-crossing event timing.
+#
+# reference_view: default front.
+#
+# direction: movement of the bottles in the image, checked visually on
+# frames 0.22 s apart at t = 100 s (runs/inspect/dir_<recording>_<view>.jpg).
+# The left/right labels may be swapped in a recording; decide by event order, not by name.
+#
+# delay_s: measured time of a view's line crossing minus front's line crossing, for the same bottle
+# (2026-10-14, whole video, line 0.5, best-fitting offset over -6..+6 s). For reference
+# only: scripts/global_ids.py estimates the delays again from the events every run. It depends
+# on the line positions; re-measure when a line moves.
+#
+# line: x position of the vertical counting line as a fraction of the image width. An event is the first
+# time a track's box center crosses it in `direction`.
+
+video: data/videos/{rec}/{rec}_{view}_cropped.mp4
+
+# settings for scripts/view_events.py
+events:
+  model: models/gas_bottle_B_yolo11n.pt
+  tracker: bytetrack.yaml
+  conf: 0.25
+  seconds: 120 # only the first 2 minutes of every view
+  min_frames: 5 # a track must be seen this many frames before it can create an event
+  out: runs/events
+
+# settings for scripts/global_ids.py
+global:
+  events: runs/events_full # output of view_events.py --seconds 0 --out runs/events_full
+  delay_scan: [-6.0, 6.0, 0.01] # from, to, step (s)
+  edge_s: 2.0 # skip events this close to the start/end when estimating a delay
+  max_dt:
+    2.0 # max time difference (s) for two events to be the same bottle. 1.0 split a bottle that
+    # an operator held (14_43 ~194 s: 1.7 s late in back_right); order keeps bottles apart
+  review_dt: 0.5 # matches further off than this are listed for review (manual handling, stops)
+  gap_cost: 1.0 # cost of a missed or extra event (a match costs |dt| / max_dt <= 1)
+  out: runs/global
+  # scripts/log_align.py: the log time is taken at another place on the line than the cameras and has 1 s or
+  # 60 s resolution, so a match may be further away than between views
+  log_max_dt: 6.0 # log times scatter up to ~5 s around the conveyor timing (14_43); order keeps bottles apart
+  log_offset_step: [1.0, 0.1] # coarse and fine grid (s) for the video -> log time offset
+  log_gap_cost: 2.0 # log times scatter ~1.2 s (sd) with bottles ~4 s apart: order counts more than time
+  log_edge_gap_cost: 0.1 # a log row partly outside the video (before the start / after the end) may be left out
+  log_colour_cost: 2.5 # colour mismatch: more than 2 gaps, so a wrong-colour match is (almost) never chosen
+  # The files say 23 fps, but the cameras ran at 23.976 fps (24000/1001): the 14_43 log over the whole video
+  # fits log time = 0.95930 * video time (23 / 0.95930 = 23.976), and the wall clock in 14_55 back_right
+  # changes minute ~1432 frames apart (+-3; 1439 expected at 23.976).
+  # Video seconds (frame / 23) are multiplied by video_fps / real_fps before comparing with the log.
+  video_fps: 23
+  real_fps: 23.976
+
+# settings for scripts/bottle_colour.py (OpenCV HSV: hue 0-179)
+colour:
+  offsets: [-6, -3, 0, 3, 6] # frames around the crossing
+  crop_x: [0.3, 0.7] # central part of the box (fraction of width / height)
+  crop_y: [0.35, 0.8]
+  hue: [75, 105] # cyan / teal
+  min_sat: 60
+  min_val: 40
+  # bottle colour from the median cyan fraction over the views; in between = unknown
+  cyan_min: 0.3
+  black_max: 0.15
+
+recordings:
+  "14_43":
+    reference_view: front
+    reference_confirmed: true
+    labels_swapped: false
+    log:
+      {
+        file: "data/videos/{rec}/{rec}_ground_truth_ai_app.xlsx",
+        time_column: Time.1,
+        resolution_s: 1,
+      }
+    views:
+      front: { direction: left_to_right, line: 0.5, delay_s: 0.0 }
+      back_left: { direction: right_to_left, line: 0.5, delay_s: 0.14 }
+      back_right: { direction: right_to_left, line: 0.5, delay_s: 1.84 }
+  "14_55":
+    reference_view: front
+    reference_confirmed: true
+    labels_swapped: true
+    log:
+      {
+        file: "data/videos/{rec}/{rec}_ground_truth_ai_app.xlsx",
+        time_column: Time,
+        resolution_s: 60,
+      }
+    views:
+      front: { direction: left_to_right, line: 0.5, delay_s: 0.0 }
+      back_left: { direction: right_to_left, line: 0.5, delay_s: 1.80 }
+      back_right: { direction: right_to_left, line: 0.5, delay_s: 0.10 }
